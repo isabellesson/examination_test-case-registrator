@@ -1,0 +1,55 @@
+@startuml classdiagram
+title Test Case Registrator
+
+skinparam classAttributeIconSize 0
+
+class TestCase {
+    + test_case_title : str
+    + purpose : str
+    + expected_result : str
+}
+
+class TestCaseService {
+    - __repository : TestCaseRepository 
+    + create_test_case(test_case : TestCase) : None
+    + get_test_cases() : list[TestCase]
+}
+
+class TestCaseRepository {
+    - __test_cases : list[TestCase]
+    + add_create_test_case(test_case : TestCase) : None
+    + get_all_test_cases() : list[TestCase]
+}
+
+class TestCaseDialog {
+    - __service : TestCaseService
+    + main_menu() : None
+    + show_create_test_case() : None
+    + show_test_cases() : None
+}
+
+class Main <<module>> {
+    + test_case_repository : TestCaseRepository
+    + test_case_service : TestCaseService
+    + test_case_dialog : TestCaseDialog
+    + main() : None
+}
+
+class Utils <<module>> {
+    + clear_screen() : None
+    + pause() : None
+    + required_input(prompt : str) : str
+}
+
+TestCaseService ..> TestCaseRepository : <<uses>>
+TestCaseDialog ..> TestCaseService : <<uses>>
+TestCaseRepository ..> TestCase : <<uses>>
+
+Main ..> TestCaseRepository : <<creates>>
+Main ..> TestCaseService : <<creates>>
+Main ..> TestCaseDialog : <<creates>>
+
+TestCaseDialog ..> Utils : <<uses>>
+
+@enduml
+
